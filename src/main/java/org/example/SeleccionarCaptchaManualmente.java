@@ -6,13 +6,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
 import java.time.Duration;
 
-public class Caso1 {
+public class SeleccionarCaptchaManualmente {
+
     public static void main(String[] args) throws InterruptedException {
 
         String user = "test01";
@@ -40,16 +40,8 @@ public class Caso1 {
         driver.findElement(By.id("userName")).sendKeys(user);
         driver.findElement(By.id("password")).sendKeys(pass);
         js.executeScript("window.scrollBy(0,300)");
-        //driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@title='reCAPTCHA']")));
-        //driver.findElement(By.id("recaptcha-anchor")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[starts-with(@name,'a-')]")));
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.id("recaptcha-anchor")));
-        element.click();
-        driver.switchTo().defaultContent();
-        Thread.sleep(2000);
-        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("register")));
+        Thread.sleep(25000);  //seleccionar captcha
+
         driver.findElement(By.id("register")).click();
         Thread.sleep(5000);
         String usuarioAgregado = driver.switchTo().alert().getText();
@@ -63,8 +55,11 @@ public class Caso1 {
         js.executeScript("window.scrollBy(0,300)");
         driver.findElement(By.id("login")).click();
         Thread.sleep(1000);
-        js.executeScript("window.scrollBy(0,800)");
-        driver.findElement(By.cssSelector(".text-center.button")).click();
+       js.executeScript("window.scrollBy(0,600)");
+
+        WebElement btnDelete =  driver.findElement(By.cssSelector(".text-center.button"));
+        js.executeScript("arguments[0].click();", btnDelete);  //click boton con  js.executeScript
+
         Thread.sleep(1000);
         driver.switchTo().alert().accept();
         Thread.sleep(1000);
@@ -72,7 +67,5 @@ public class Caso1 {
         System.out.println(usuarioEliminado);
         Assert.assertEquals(deleteUser, usuarioEliminado);
         driver.switchTo().alert().accept();
-
     }
-
 }
